@@ -15,7 +15,7 @@ const ROLE_RESTRICTED: { prefix: string; roles: string[] }[] = [
 
 const AUTH_ONLY_ROUTES = ['/login', '/register'];
 
-export function middleware(request: NextRequest) {
+export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   const accessToken = request.cookies.get('accessToken')?.value;
