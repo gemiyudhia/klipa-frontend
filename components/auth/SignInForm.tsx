@@ -35,7 +35,7 @@ import AuthFormHeader from './AuthFormHeader';
 import AuthDivider from './AuthDivider';
 import SocialLoginButton from './SocialLoginButton';
 
-export default function LoginForm() {
+export default function SignInForm() {
   const router = useRouter();
   const [isSubmmitting, setIsSubmitting] = React.useState<boolean>(false);
 
@@ -90,28 +90,30 @@ export default function LoginForm() {
       </CardHeader>
       <CardContent>
         <form onSubmit={form.handleSubmit(onSubmit)} noValidate>
-          <FieldGroup>
+          <FieldGroup className="space-y-6">
             <Controller
               name="email"
               control={form.control}
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid}>
-                  <FieldLabel>
-                    <IoMdMail className="text-lg text-gray-800 md:text-2xl" />
-                    <p className="text-gray-800 font-bold text-lg tracking-wide md:text-2xl">
-                      Alamat Email
-                    </p>
-                  </FieldLabel>
-                  <Input
-                    {...field}
-                    aria-invalid={fieldState.invalid}
-                    placeholder="lu@contoh.com"
-                    autoComplete="off"
-                    className="py-6 border-4 neo-input tracking-wide focus:tracking-wide md:text-xl"
-                  />
-                  {fieldState.invalid && (
-                    <FieldError errors={[fieldState.error]} />
-                  )}
+                  <div className="relative">
+                    <FieldLabel className="absolute left-5 top-0 z-10 -translate-y-1/2 bg-background md:bg-card">
+                      <IoMdMail className="text-lg text-gray-800 md:text-2xl" />
+                      <p className="text-gray-800 font-bold text-lg tracking-wide md:text-2xl">
+                        Alamat Email
+                      </p>
+                    </FieldLabel>
+                    <Input
+                      {...field}
+                      aria-invalid={fieldState.invalid}
+                      placeholder="lu@contoh.com"
+                      autoComplete="off"
+                      className="py-8 px-5 border-4 neo-input tracking-wide focus:tracking-wide md:text-xl"
+                    />
+                    {fieldState.invalid && (
+                      <FieldError errors={[fieldState.error]} />
+                    )}
+                  </div>
                 </Field>
               )}
             />
@@ -121,22 +123,24 @@ export default function LoginForm() {
               control={form.control}
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid}>
-                  <FieldLabel>
-                    <MdVpnKey className="text-lg text-gray-800 md:text-2xl" />
-                    <p className="text-gray-800 font-bold text-lg tracking-wide md:text-2xl">
-                      Kata Sandi
-                    </p>
-                  </FieldLabel>
-                  <Input
-                    {...field}
-                    aria-invalid={fieldState.invalid}
-                    placeholder="Masukin kata sandi lu"
-                    autoComplete="off"
-                    className="py-6 border-4 neo-input tracking-wide focus:tracking-wide md:text-xl"
-                  />
-                  {fieldState.invalid && (
-                    <FieldError errors={[fieldState.error]} />
-                  )}
+                  <div className="relative">
+                    <FieldLabel className="absolute left-5 top-0 z-10 -translate-y-1/2 bg-background md:bg-card">
+                      <MdVpnKey className="text-lg text-gray-800 md:text-2xl" />
+                      <p className="text-gray-800 font-bold text-lg tracking-wide md:text-2xl">
+                        Kata Sandi
+                      </p>
+                    </FieldLabel>
+                    <Input
+                      {...field}
+                      aria-invalid={fieldState.invalid}
+                      placeholder="Masukin kata sandi lu"
+                      autoComplete="off"
+                      className="py-8 px-5 border-4 neo-input tracking-wide focus:tracking-wide md:text-xl"
+                    />
+                    {fieldState.invalid && (
+                      <FieldError errors={[fieldState.error]} />
+                    )}
+                  </div>
                 </Field>
               )}
             />
@@ -156,20 +160,23 @@ export default function LoginForm() {
           <div className="space-y-4">
             <Button
               type="submit"
-              className="w-full h-12 neo-button text-black font-extrabold text-sm uppercase border-4 border-black rounded-none active:shadow-none transition-none flex items-center justify-center gap-2 tracking-wide"
+              className="w-full h-12 md:h-14 neo-button text-black font-extrabold text-sm uppercase border-4 border-black rounded-none active:shadow-none transition-none flex items-center justify-center gap-2 tracking-wide"
             >
               <span className="md:text-xl">Masuk Kuy</span>
               <LuMoveRight className="w-5 h-5 stroke-[2.5]" />
             </Button>
 
-            <Button
-              type="button"
-              variant="outline"
-              className="w-full h-12 neo-button text-black font-extrabold text-sm uppercase tracking-wide border-4 border-black rounded-none neo-shadow transition-none flex items-center justify-center gap-2"
-            >
-              <LuUserPlus className="w-5 h-5 stroke-[2.5]" />
-              <span className="md:text-xl">Daftar Akun Baru</span>
-            </Button>
+            <Link href="/sign-up">
+              <Button
+                type="button"
+                variant="outline"
+                className="w-full h-12 md:h-14 neo-button text-black font-extrabold text-sm uppercase tracking-wide border-4 border-black rounded-none neo-shadow transition-none flex items-center justify-center gap-2"
+              >
+                <LuUserPlus className="w-5 h-5 stroke-[2.5]" />
+
+                <span className="md:text-xl">Daftar Akun Baru</span>
+              </Button>
+            </Link>
           </div>
 
           <AuthDivider />
