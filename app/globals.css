@@ -1,5 +1,5 @@
-@import "tailwindcss";
-@import "tw-animate-css";
+@import 'tailwindcss';
+@import 'tw-animate-css';
 
 @custom-variant dark (&:is(.dark *));
 
@@ -15,6 +15,8 @@
   --primary-foreground: oklch(0 0 0);
   --secondary: oklch(0.67 0.28 350);
   --secondary-foreground: oklch(1 0 0);
+  --tertiary: oklch(0.4741 0.252 268.4);
+  --tertiary-foreground: oklch(1 0 0);
   --accent: oklch(0.63 0.27 260);
   --accent-foreground: oklch(1 0 0);
   --muted: oklch(0.93 0 0);
@@ -88,6 +90,9 @@
   --color-secondary: var(--secondary);
   --color-secondary-foreground: var(--secondary-foreground);
 
+  --color-tertiary: var(--tertiary);
+  --color-tertiary-foreground: var(--tertiary-foreground);
+
   --color-accent: var(--accent);
   --color-accent-foreground: var(--accent-foreground);
 
@@ -111,7 +116,7 @@
 
   body {
     @apply bg-background text-foreground;
-    font-family: "Space Grotesk", sans-serif;
+    font-family: 'Space Grotesk', sans-serif;
   }
 
   button,
@@ -169,10 +174,10 @@
   }
 
   .rotate-left {
-    transform: rotate(-1deg);
+    transform: rotate(1.5deg);
   }
 
   .rotate-right {
-    transform: rotate(-4deg);
+    transform: rotate(-1.5deg);
   }
 }
