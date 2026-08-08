@@ -71,19 +71,20 @@ export default function LoginForm() {
   }
 
   return (
-    <Card className="bg-transparent border-0 shadow-none ring-0">
-      <CardHeader className="flex items-center flex-col">
+    <Card className="bg-transparent border-0 shadow-none ring-0 md:bg-white md:border-black md:shadow-[9px_9px_0px_black]">
+      <CardHeader className="flex items-center flex-col pb-8">
         <Image
           src="/brand/klipa-logo.svg"
           alt="logo klipa"
           width={100}
           height={100}
-          className="rotate-right flex items-center justify-center w-full"
+          loading="eager"
+          className="rotate-right flex items-center justify-center w-full sticky"
         />
-        <CardDescription className="my-8">
+        <CardDescription className="my-3">
           <AuthFormHeader
-            title="Halo lagi!!!"
-            description="Siap berkarya hari ini??"
+            title="Halo!!!"
+            description="Selamat datang di Klipa"
           />
         </CardDescription>
       </CardHeader>
@@ -95,19 +96,18 @@ export default function LoginForm() {
               control={form.control}
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid}>
-                  <FieldLabel htmlFor="form-rhf-demo-title">
-                    <IoMdMail className="text-lg text-gray-800" />
-                    <p className="text-gray-800 font-bold text-lg tracking-wide">
+                  <FieldLabel>
+                    <IoMdMail className="text-lg text-gray-800 md:text-2xl" />
+                    <p className="text-gray-800 font-bold text-lg tracking-wide md:text-2xl">
                       Alamat Email
                     </p>
                   </FieldLabel>
                   <Input
                     {...field}
-                    id="form-rhf-demo-title"
                     aria-invalid={fieldState.invalid}
-                    placeholder="kamu@contoh.com"
+                    placeholder="lu@contoh.com"
                     autoComplete="off"
-                    className="py-6 border-4 border-gray-800"
+                    className="py-6 border-4 neo-input tracking-wide focus:tracking-wide md:text-xl"
                   />
                   {fieldState.invalid && (
                     <FieldError errors={[fieldState.error]} />
@@ -121,19 +121,18 @@ export default function LoginForm() {
               control={form.control}
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid}>
-                  <FieldLabel htmlFor="form-rhf-demo-password">
-                    <MdVpnKey className="text-lg text-gray-800" />
-                    <p className="text-gray-800 font-bold text-lg tracking-wide">
+                  <FieldLabel>
+                    <MdVpnKey className="text-lg text-gray-800 md:text-2xl" />
+                    <p className="text-gray-800 font-bold text-lg tracking-wide md:text-2xl">
                       Kata Sandi
                     </p>
                   </FieldLabel>
                   <Input
                     {...field}
-                    id="form-rhf-demo-password"
                     aria-invalid={fieldState.invalid}
                     placeholder="Masukin kata sandi lu"
                     autoComplete="off"
-                    className="py-6 border-4 border-gray-800"
+                    className="py-6 border-4 neo-input tracking-wide focus:tracking-wide md:text-xl"
                   />
                   {fieldState.invalid && (
                     <FieldError errors={[fieldState.error]} />
@@ -144,7 +143,7 @@ export default function LoginForm() {
             <div className="text-right">
               <Link
                 href="#"
-                className="underline underline-offset-4 font-bold text-lg text-gray-800 transition-none tracking-wide"
+                className="underline underline-offset-4 font-bold text-lg text-gray-800 transition-none tracking-wide md:text-2xl"
               >
                 Lupa sandi?
               </Link>
@@ -152,24 +151,24 @@ export default function LoginForm() {
           </FieldGroup>
         </form>
       </CardContent>
-      <CardFooter className="border-none bg-transparent">
+      <CardFooter className="border-none bg-transparent pb-8">
         <Field orientation="vertical" className="pt-2">
           <div className="space-y-4">
             <Button
               type="submit"
-              className="w-full h-12 neo-button text-black font-extrabold text-sm uppercase border-4 border-black rounded-none hover:neo-button  active:shadow-none transition-none flex items-center justify-center gap-2 tracking-wide"
+              className="w-full h-12 neo-button text-black font-extrabold text-sm uppercase border-4 border-black rounded-none active:shadow-none transition-none flex items-center justify-center gap-2 tracking-wide"
             >
-              <span>Masuk Kuy</span>
+              <span className="md:text-xl">Masuk Kuy</span>
               <LuMoveRight className="w-5 h-5 stroke-[2.5]" />
             </Button>
 
             <Button
               type="button"
               variant="outline"
-              className="w-full h-12 neo-button text-black font-extrabold text-sm uppercase tracking-wide border-4 border-black rounded-none neo-shadow hover:neo-button  transition-none flex items-center justify-center gap-2"
+              className="w-full h-12 neo-button text-black font-extrabold text-sm uppercase tracking-wide border-4 border-black rounded-none neo-shadow transition-none flex items-center justify-center gap-2"
             >
               <LuUserPlus className="w-5 h-5 stroke-[2.5]" />
-              <span>Daftar Akun Baru</span>
+              <span className="md:text-xl">Daftar Akun Baru</span>
             </Button>
           </div>
 

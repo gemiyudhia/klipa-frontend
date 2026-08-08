@@ -164,14 +164,8 @@
 
   .neo-input {
     @apply bg-background;
-    border: 3px solid black;
+    border: 3px solid #2848ee;
     border-radius: 0;
-  }
-
-  .neo-input:focus {
-    outline: none;
-    background: hsl(var(--primary));
-    box-shadow: 4px 4px 0 #2848ee;
   }
 
   .rotate-left {

@@ -21,7 +21,7 @@ export default function SocialLoginButton({
         className="w-full h-12 neo-button text-black font-extrabold text-sm uppercase tracking-wide border-4 border-black rounded-none neo-shadow hover:neo-button  transition-none flex items-center justify-center gap-2"
       >
         {icon}
-        <span>{label}</span>
+        <span className="md:text-xl">{label}</span>
       </Button>
     </div>
   );
