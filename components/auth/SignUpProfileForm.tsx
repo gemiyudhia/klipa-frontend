@@ -208,7 +208,7 @@ export default function SignUpProfileForm({
             </div>
           </FieldGroup>
 
-          <CardFooter className="border-none bg-transparent pb-0 pt-8 px-0">
+          <CardFooter className="border-none bg-transparent pb-8 pt-8 px-0">
             <Field orientation="vertical" className="pt-2">
               <Button
                 type="submit"

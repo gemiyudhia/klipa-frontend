@@ -1,7 +1,7 @@
 'use client';
 
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { toast } from 'sonner';
 
 import { Button } from '@/components/ui/button';
@@ -9,12 +9,41 @@ import { Button } from '@/components/ui/button';
 import RoleSelector, { RoleValue } from './RoleSelector';
 
 import apiClient from '@/lib/api/client';
+import { useAuthStore } from '@/store/authStore';
 
 export default function RoleSelectorForm() {
   const router = useRouter();
+  const searchParams = useSearchParams();
 
   const [role, setRole] = useState<RoleValue>();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isReady, setIsReady] = useState(false);
+
+  useEffect(() => {
+    const accessToken = searchParams.get('access_token');
+    const refreshToken = searchParams.get('refresh_token');
+
+    async function init() {
+      if (accessToken && refreshToken) {
+        try {
+          const { data: profile } = await apiClient.get('/auth/me', {
+            headers: { Authorization: `Bearer ${accessToken}` },
+          });
+
+          useAuthStore.getState().login(profile, accessToken, refreshToken);
+
+          window.history.replaceState({}, '', '/role-selector');
+        } catch (error) {
+          toast.error('Sesi tidak valid, silakan login ulang');
+          router.push('/sign-in');
+          return;
+        }
+      }
+      setIsReady(true);
+    }
+
+    init();
+  }, [searchParams, router]);
 
   async function handleSubmit() {
     if (!role) return;
@@ -22,22 +51,25 @@ export default function RoleSelectorForm() {
     setIsSubmitting(true);
 
     try {
-      await apiClient.patch('/auth/select-role', {
-        role,
-      });
+      const { data } = await apiClient.patch('/auth/select-role', { role });
+
+      const currentUser = useAuthStore.getState().user;
+      if (currentUser) {
+        useAuthStore.getState().setUser({ ...currentUser, role: data.role });
+      }
 
       toast.success('Role berhasil dipilih!');
-
       router.push('/');
     } catch (error: any) {
       const message =
         error?.response?.data?.message || 'Gagal memilih role, coba lagi';
-
       toast.error(Array.isArray(message) ? message[0] : message);
     } finally {
       setIsSubmitting(false);
     }
   }
+
+  if (!isReady) return null;
 
   return (
     <main className="w-full max-w-4xl mx-auto px-4 py-8">
