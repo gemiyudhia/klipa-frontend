@@ -28,6 +28,16 @@ export function proxy(request: NextRequest) {
     pathname.startsWith(route),
   );
 
+  const isRoleSelected = request.cookies.get('isRoleSelected')?.value;
+
+  if (
+    accessToken &&
+    isRoleSelected === 'false' &&
+    pathname !== '/role-selector'
+  ) {
+    return NextResponse.redirect(new URL('/role-selector', request.url));
+  }
+
   if (isProtectedRoute && !accessToken) {
     const loginUrl = new URL('/login', request.url);
     loginUrl.searchParams.set('redirect', pathname);

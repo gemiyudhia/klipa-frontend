@@ -30,13 +30,23 @@ const COOKIE_OPTIONS = {
   secure: process.env.NODE_ENV === 'production',
 };
 
-function syncAuthCookies(accessToken: string | null, role: Role | null) {
+function syncAuthCookies(
+  accessToken: string | null,
+  role: Role | null,
+  isRoleSelected?: boolean,
+) {
   if (accessToken && role) {
     Cookies.set('accessToken', accessToken, COOKIE_OPTIONS);
     Cookies.set('userRole', role, COOKIE_OPTIONS);
+    Cookies.set(
+      'isRoleSelected',
+      String(isRoleSelected ?? true),
+      COOKIE_OPTIONS,
+    );
   } else {
     Cookies.remove('accessToken');
     Cookies.remove('userRole');
+    Cookies.remove('isRoleSelected');
   }
 }
 

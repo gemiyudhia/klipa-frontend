@@ -28,26 +28,26 @@ import { LuMoveRight, LuUserPlus } from 'react-icons/lu';
 import { MdVpnKey } from 'react-icons/md';
 import { FcGoogle } from 'react-icons/fc';
 import { useRouter } from 'next/navigation';
-import { loginSchema, loginSchemaValue } from '@/lib/validations/auth.schema';
 import apiClient from '@/lib/api/client';
 import { useAuthStore } from '@/store/authStore';
 import AuthFormHeader from './AuthFormHeader';
 import AuthDivider from './AuthDivider';
 import SocialLoginButton from './SocialLoginButton';
+import { signInSchema, signInSchemaValue } from '@/lib/validations/auth.schema';
 
 export default function SignInForm() {
   const router = useRouter();
   const [isSubmmitting, setIsSubmitting] = React.useState<boolean>(false);
 
-  const form = useForm<loginSchemaValue>({
-    resolver: zodResolver(loginSchema),
+  const form = useForm<signInSchemaValue>({
+    resolver: zodResolver(signInSchema),
     defaultValues: {
       email: '',
       password: '',
     },
   });
 
-  async function onSubmit(data: loginSchemaValue) {
+  async function onSubmit(data: signInSchemaValue) {
     setIsSubmitting(true);
     try {
       const { data: tokens } = await apiClient.post('/auth/login', data);
