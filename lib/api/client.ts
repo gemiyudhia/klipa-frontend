@@ -15,10 +15,12 @@ const apiClient: AxiosInstance = axios.create({
 });
 
 apiClient.interceptors.request.use((config: InternalAxiosRequestConfig) => {
-  const accessToken = useAuthStore.getState().accessToken;
-
-  if (accessToken) config.headers.Authorization = `Bearer ${accessToken}`;
-
+  if (!config.headers.Authorization) {
+    const accessToken = useAuthStore.getState().accessToken;
+    if (accessToken) {
+      config.headers.Authorization = `Bearer ${accessToken}`;
+    }
+  }
   return config;
 });
 
