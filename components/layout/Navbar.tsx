@@ -10,7 +10,7 @@ export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
-    <nav className="bg-white border-b-8 py-3 md:py-5 ">
+    <nav className="relative bg-white border-b-8 py-3 md:py-5 ">
       <div className="relative flex h-14 items-center justify-between px-3 md:h-16 md:px-24">
         <div className="flex items-center md:hidden">
           <Button
@@ -93,7 +93,7 @@ export default function Navbar() {
       </div>
 
       {isMenuOpen && (
-        <div className="border-t-4 border-black bg-white px-4 py-4 md:hidden">
+        <div className="absolute right-0 left-0 z-50  border-b-4 border-t-4 border-black bg-white px-4 py-4 md:hidden">
           <div className="flex flex-col gap-3">
             <Link href="">
               <Button
