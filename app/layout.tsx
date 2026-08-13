@@ -16,7 +16,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: LayoutProps<'/'>) {
   return (
-    <html lang="id" className={`${spaceGrotesk.variable} h-full antialiased`}>
+    <html lang="id" className={`${spaceGrotesk.variable} h-full antialiased scroll-smooth`}>
       <body className={`${spaceGrotesk.className} min-h-full flex flex-col tracking-wide`}>
         {children}
       </body>
