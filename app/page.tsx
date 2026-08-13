@@ -77,7 +77,7 @@ const plans = [
 ];
 
 const navLinks = [
-  { label: 'Ekplor Bounty', href: '#bounty' },
+  { label: 'Ekplor Bounty', href: '#explore' },
   { label: 'Cara Kerja', href: '#cara-kerja' },
   { label: 'Harga & Komisi', href: '#harga-komisi' },
 ];

@@ -9,6 +9,8 @@ export interface AuthUser {
   name: string;
   email: string;
   role: Role;
+  balance: number;
+  isRoleSelected: boolean;
 }
 
 interface AuthState {
@@ -60,17 +62,21 @@ export const useAuthStore = create<AuthState>()(
 
       setTokens: (accessToken, refreshToken) => {
         set({ accessToken, refreshToken });
-        syncAuthCookies(accessToken, get().user?.role ?? null);
+        syncAuthCookies(
+          accessToken,
+          get().user?.role ?? null,
+          get().user?.isRoleSelected,
+        );
       },
 
       setUser: (user) => {
         set({ user });
-        syncAuthCookies(get().accessToken, user.role);
+        syncAuthCookies(get().accessToken, user.role, user.isRoleSelected); 
       },
 
       login: (user, accessToken, refreshToken) => {
         set({ user, accessToken, refreshToken });
-        syncAuthCookies(accessToken, user.role);
+        syncAuthCookies(accessToken, user.role, user.isRoleSelected); 
       },
 
       logout: () => {
@@ -84,7 +90,11 @@ export const useAuthStore = create<AuthState>()(
       name: 'klipa-auth-storage',
       onRehydrateStorage: () => (state) => {
         if (state) {
-          syncAuthCookies(state.accessToken, state.user?.role ?? null);
+          syncAuthCookies(
+            state.accessToken,
+            state.user?.role ?? null,
+            state.user?.isRoleSelected,
+          );
         }
         state?.setHydrated();
       },

@@ -134,6 +134,7 @@ export default function SignInForm() {
                       {...field}
                       aria-invalid={fieldState.invalid}
                       placeholder="Masukin kata sandi lu"
+                      type="password"
                       autoComplete="off"
                       className="py-8 px-5 border-4 neo-input tracking-wide focus:tracking-wide md:text-xl"
                     />
@@ -153,39 +154,44 @@ export default function SignInForm() {
               </Link>
             </div>
           </FieldGroup>
+          <CardFooter className="border-none bg-transparent pb-8">
+            <Field orientation="vertical" className="pt-2">
+              <div className="space-y-4">
+                <Button
+                  type="submit"
+                  disabled={isSubmmitting}
+                  className="w-full h-12 md:h-14 neo-button text-black font-extrabold text-sm uppercase border-4 border-black rounded-none active:shadow-none transition-none flex items-center justify-center gap-2 tracking-wide"
+                >
+                  <span className="md:text-xl">
+                    {isSubmmitting ? 'Lagi masuk...' : 'Masuk Kuy'}
+                  </span>
+                  {!isSubmmitting && (
+                    <LuMoveRight className="w-5 h-5 stroke-[2.5]" />
+                  )}
+                </Button>
+
+                <Link href="/sign-up">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    className="w-full h-12 md:h-14 neo-button text-black font-extrabold text-sm uppercase tracking-wide border-4 border-black rounded-none neo-shadow transition-none flex items-center justify-center gap-2"
+                  >
+                    <LuUserPlus className="w-5 h-5 stroke-[2.5]" />
+
+                    <span className="md:text-xl">Daftar Akun Baru</span>
+                  </Button>
+                </Link>
+              </div>
+
+              <AuthDivider />
+              <SocialLoginButton
+                icon={<FcGoogle className="w-5 h-5" />}
+                label="Login pake Google"
+              ></SocialLoginButton>
+            </Field>
+          </CardFooter>
         </form>
       </CardContent>
-      <CardFooter className="border-none bg-transparent pb-8">
-        <Field orientation="vertical" className="pt-2">
-          <div className="space-y-4">
-            <Button
-              type="submit"
-              className="w-full h-12 md:h-14 neo-button text-black font-extrabold text-sm uppercase border-4 border-black rounded-none active:shadow-none transition-none flex items-center justify-center gap-2 tracking-wide"
-            >
-              <span className="md:text-xl">Masuk Kuy</span>
-              <LuMoveRight className="w-5 h-5 stroke-[2.5]" />
-            </Button>
-
-            <Link href="/sign-up">
-              <Button
-                type="button"
-                variant="outline"
-                className="w-full h-12 md:h-14 neo-button text-black font-extrabold text-sm uppercase tracking-wide border-4 border-black rounded-none neo-shadow transition-none flex items-center justify-center gap-2"
-              >
-                <LuUserPlus className="w-5 h-5 stroke-[2.5]" />
-
-                <span className="md:text-xl">Daftar Akun Baru</span>
-              </Button>
-            </Link>
-          </div>
-
-          <AuthDivider />
-          <SocialLoginButton
-            icon={<FcGoogle className="w-5 h-5" />}
-            label="Login pake Google"
-          ></SocialLoginButton>
-        </Field>
-      </CardFooter>
     </Card>
   );
 }
