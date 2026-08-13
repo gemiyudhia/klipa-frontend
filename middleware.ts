@@ -13,13 +13,14 @@ const ROLE_RESTRICTED: { prefix: string; roles: string[] }[] = [
   { prefix: '/admin', roles: ['ADMIN'] },
 ];
 
-const AUTH_ONLY_ROUTES = ['/login', '/register'];
+const AUTH_ONLY_ROUTES = ['/sign-in', '/sign-up']; 
 
-export function proxy(request: NextRequest) {
+export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   const accessToken = request.cookies.get('accessToken')?.value;
   const role = request.cookies.get('userRole')?.value;
+  const isRoleSelected = request.cookies.get('isRoleSelected')?.value;
 
   const isProtectedRoute = PROTECTED_PREFIXES.some((prefix) =>
     pathname.startsWith(prefix),
@@ -27,8 +28,6 @@ export function proxy(request: NextRequest) {
   const isAuthOnlyRoute = AUTH_ONLY_ROUTES.some((route) =>
     pathname.startsWith(route),
   );
-
-  const isRoleSelected = request.cookies.get('isRoleSelected')?.value;
 
   if (
     accessToken &&
@@ -39,7 +38,7 @@ export function proxy(request: NextRequest) {
   }
 
   if (isProtectedRoute && !accessToken) {
-    const loginUrl = new URL('/login', request.url);
+    const loginUrl = new URL('/sign-in', request.url);
     loginUrl.searchParams.set('redirect', pathname);
     return NextResponse.redirect(loginUrl);
   }
