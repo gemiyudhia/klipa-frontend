@@ -7,7 +7,7 @@ import Link from 'next/link';
 const steps = [
   {
     number: '1',
-    numberBg: 'bg-[#FFE600]', // Kuning
+    numberBg: 'bg-[#FFE600]', 
     numberText: 'text-black',
     title: 'BUKA CAMPAIGN',
     description:
@@ -16,7 +16,7 @@ const steps = [
   },
   {
     number: '2',
-    numberBg: 'bg-[#D90077]', // Magenta / Pink
+    numberBg: 'bg-[#D90077]', 
     numberText: 'text-white',
     title: 'CLIPPER POTONG',
     description:
@@ -25,7 +25,7 @@ const steps = [
   },
   {
     number: '3',
-    numberBg: 'bg-[#2B52FF]', // Biru
+    numberBg: 'bg-[#2B52FF]', 
     numberText: 'text-white',
     title: 'REVIEW KLIP',
     description:
@@ -34,7 +34,7 @@ const steps = [
   },
   {
     number: '4',
-    numberBg: 'bg-[#1A1A1A]', // Hitam
+    numberBg: 'bg-[#1A1A1A]', 
     numberText: 'text-white',
     title: 'PENCAIRAN',
     description:
