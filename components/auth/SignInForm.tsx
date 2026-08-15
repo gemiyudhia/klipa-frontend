@@ -28,7 +28,6 @@ import { LuMoveRight, LuUserPlus } from 'react-icons/lu';
 import { MdVpnKey } from 'react-icons/md';
 import { FcGoogle } from 'react-icons/fc';
 import { useRouter } from 'next/navigation';
-import apiClient from '@/lib/api/client';
 import { useAuthStore } from '@/store/authStore';
 import AuthFormHeader from './AuthFormHeader';
 import AuthDivider from './AuthDivider';
@@ -47,28 +46,42 @@ export default function SignInForm() {
     },
   });
 
-  async function onSubmit(data: signInSchemaValue) {
-    setIsSubmitting(true);
-    try {
-      const { data: tokens } = await apiClient.post('/auth/login', data);
-      const { data: profile } = await apiClient.get('/auth/me', {
-        headers: { Authorization: `Bearer ${tokens.access_token}` },
-      });
+ async function onSubmit(data: signInSchemaValue) {
+   setIsSubmitting(true);
 
-      useAuthStore
-        .getState()
-        .login(profile, tokens.access_token, tokens.refresh_token);
+   try {
+     const response = await fetch('/api/auth/login', {
+       method: 'POST',
+       headers: {
+         'Content-Type': 'application/json',
+       },
+       body: JSON.stringify(data),
+     });
 
-      toast.success('Berhasil Masuk!');
-      router.push('/');
-    } catch (error: any) {
-      const message =
-        error?.response?.data?.message || 'Email atau kata sandi salah bre';
-      toast.error(message);
-    } finally {
-      setIsSubmitting(false);
-    }
-  }
+     const result = await response.json();
+
+     if (!response.ok) {
+       throw new Error(
+         Array.isArray(result.message) ? result.message[0] : result.message,
+       );
+     }
+
+     useAuthStore.getState().login(result.user);
+
+     toast.success('Berhasil Masuk!');
+
+     router.push('/');
+     router.refresh();
+   } catch (error) {
+     toast.error(
+       error instanceof Error
+         ? error.message
+         : 'Email atau kata sandi salah bre',
+     );
+   } finally {
+     setIsSubmitting(false);
+   }
+ }
 
   return (
     <Card className="bg-transparent border-0 shadow-none ring-0 md:bg-white md:border-black md:shadow-[9px_9px_0px_black]">

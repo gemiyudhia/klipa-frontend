@@ -1,3 +1,4 @@
+import Footer from '@/components/layout/Footer';
 import Navbar from '@/components/layout/Navbar';
 import { Button } from '@/components/ui/button';
 import { Check } from 'lucide-react';
@@ -7,7 +8,7 @@ import Link from 'next/link';
 const steps = [
   {
     number: '1',
-    numberBg: 'bg-[#FFE600]', 
+    numberBg: 'bg-[#FFE600]',
     numberText: 'text-black',
     title: 'BUKA CAMPAIGN',
     description:
@@ -16,7 +17,7 @@ const steps = [
   },
   {
     number: '2',
-    numberBg: 'bg-[#D90077]', 
+    numberBg: 'bg-[#D90077]',
     numberText: 'text-white',
     title: 'CLIPPER POTONG',
     description:
@@ -25,7 +26,7 @@ const steps = [
   },
   {
     number: '3',
-    numberBg: 'bg-[#2B52FF]', 
+    numberBg: 'bg-[#2B52FF]',
     numberText: 'text-white',
     title: 'REVIEW KLIP',
     description:
@@ -34,7 +35,7 @@ const steps = [
   },
   {
     number: '4',
-    numberBg: 'bg-[#1A1A1A]', 
+    numberBg: 'bg-[#1A1A1A]',
     numberText: 'text-white',
     title: 'PENCAIRAN',
     description:
@@ -76,13 +77,7 @@ const plans = [
   },
 ];
 
-const navLinks = [
-  { label: 'Ekplor Bounty', href: '#explore' },
-  { label: 'Cara Kerja', href: '#cara-kerja' },
-  { label: 'Harga & Komisi', href: '#harga-komisi' },
-];
 export default function HomePage() {
-  const currentYear = new Date().getFullYear();
   return (
     <main className="overflow-x-hidden">
       <Navbar />
@@ -108,7 +103,7 @@ export default function HomePage() {
             </p>
 
             <div className="flex w-full max-w-xs flex-col gap-3 sm:max-w-sm md:w-auto">
-              <Link href="/">
+              <Link href="/explore">
                 <Button className="neo-button w-full bg-secondary px-10 py-7 text-lg font-bold text-white">
                   Gas Cobain Bre!!
                 </Button>
@@ -255,41 +250,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      <footer className="w-full bg-[#1A1A1A] text-white">
-        <div className="mx-auto max-w-7xl px-6 py-12 md:px-10">
-          <div className="flex flex-col gap-8 md:flex-row md:items-center md:justify-between">
-            <div className="max-w-md">
-              <h2 className="mb-3 text-3xl font-black text-[#FFE600] uppercase tracking-wide">
-                KLIPA
-              </h2>
-              <p className="text-sm font-medium leading-relaxed text-gray-300">
-                Platform marketing paling asik buat nyari duit dari klip video
-                lu. No ribet, gaspol!
-              </p>
-            </div>
-
-            <nav className="flex flex-wrap gap-6 md:gap-8">
-              {navLinks.map((link, index) => (
-                <Link
-                  key={index}
-                  href={link.href}
-                  className="text-xs font-black tracking-wider text-white transition-colors hover:text-[#FFE600] uppercase"
-                >
-                  {link.label}
-                </Link>
-              ))}
-            </nav>
-          </div>
-
-          <hr className="my-8 border-t border-gray-600" />
-
-          <div className="text-center">
-            <p className="text-xs font-bold text-gray-300">
-              &copy; {currentYear} Klipa. Jangan diplagiat bos.
-            </p>
-          </div>
-        </div>
-      </footer>
+      <Footer />
     </main>
   );
 }
