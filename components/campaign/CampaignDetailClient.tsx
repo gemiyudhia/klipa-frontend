@@ -1,10 +1,8 @@
 'use client';
 
-import { useState } from 'react';
 import Link from 'next/link';
 import { ShieldCheck, Play } from 'lucide-react';
 
-import SubmitClipModal from '@/components/clip/SubmitClipModal';
 import { type Campaign } from '@/lib/api/campaign';
 import { useAuthStore } from '@/store/authStore';
 import {
@@ -20,8 +18,6 @@ type Props = {
 
 export default function CampaignDetailClient({ campaign }: Props) {
   const user = useAuthStore((state) => state.user);
-
-  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const { usedSlots, totalSlots, isFull } = calculateSlots(campaign);
   const isActive = campaign.status === 'ACTIVE';
@@ -130,7 +126,6 @@ export default function CampaignDetailClient({ campaign }: Props) {
                 isLoggedIn={!!user}
                 isFull={isFull}
                 isActive={isActive}
-                onOpenModal={() => setIsModalOpen(true)}
               />
 
               <div className="mt-4 flex items-center justify-center gap-1.5 text-center text-[11px] font-extrabold uppercase">
@@ -155,14 +150,6 @@ export default function CampaignDetailClient({ campaign }: Props) {
             </div>
           </div>
         </div>
-
-        {isModalOpen && (
-          <SubmitClipModal
-            campaignId={campaign.id}
-            onClose={() => setIsModalOpen(false)}
-            onSuccess={() => setIsModalOpen(false)}
-          />
-        )}
       </section>
     </div>
   );

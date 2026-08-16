@@ -11,6 +11,7 @@ const PROTECTED_PREFIXES = [
   '/admin',
   '/dashboard',
   '/profile',
+  '/submit-clip',
 ];
 
 const ROLE_RESTRICTED: { prefix: string; roles: string[] }[] = [
@@ -66,8 +67,7 @@ export async function middleware(request: NextRequest) {
         newTokens = await refreshResponse.json();
         accessToken = newTokens?.access_token;
       }
-    } catch {
-    }
+    } catch {}
   }
 
   const isAuthenticated = Boolean(accessToken && !isTokenExpired(accessToken));
