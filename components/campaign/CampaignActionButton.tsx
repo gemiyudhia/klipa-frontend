@@ -9,7 +9,6 @@ interface CampaignActionButtonProps {
   isLoggedIn: boolean;
   isFull: boolean;
   isActive: boolean;
-  onOpenModal: () => void;
 }
 
 export function CampaignActionButton({
@@ -18,7 +17,6 @@ export function CampaignActionButton({
   isLoggedIn,
   isFull,
   isActive,
-  onOpenModal,
 }: CampaignActionButtonProps) {
   if (!isLoggedIn) {
     return (
@@ -46,26 +44,25 @@ export function CampaignActionButton({
 
   const isDisabled = isFull || !isActive;
 
+  if (isDisabled) {
+    return (
+      <Button
+        disabled
+        className="neo-button w-full cursor-not-allowed border-gray-500 bg-gray-300 py-7 text-base font-black uppercase tracking-wider text-gray-600"
+      >
+        {isFull ? 'SLOT HABIS' : 'CAMPAIGN TIDAK AKTIF'}
+      </Button>
+    );
+  }
+
   return (
-    <Button
-      disabled={isDisabled}
-      onClick={onOpenModal}
-      className={`neo-button w-full py-7 text-base font-black uppercase tracking-wider ${
-        isDisabled
-          ? 'cursor-not-allowed border-gray-500 bg-gray-300 text-gray-600'
-          : 'bg-white text-black hover:bg-gray-100'
-      }`}
-    >
-      {isFull ? (
-        'SLOT HABIS'
-      ) : !isActive ? (
-        'CAMPAIGN TIDAK AKTIF'
-      ) : (
+    <Link href={`/submit-clip/${campaign.id}`} className="block">
+      <Button className="neo-button w-full bg-white py-7 text-base font-black uppercase tracking-wider text-black hover:bg-gray-100">
         <span className="flex items-center justify-center gap-2">
           AMBIL BOUNTY INI
           <Zap className="h-5 w-5 fill-black" />
         </span>
-      )}
-    </Button>
+      </Button>
+    </Link>
   );
 }
