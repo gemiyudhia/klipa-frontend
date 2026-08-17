@@ -12,10 +12,12 @@ const PROTECTED_PREFIXES = [
   '/dashboard',
   '/profile',
   '/submit-clip',
+  '/creator',
 ];
 
 const ROLE_RESTRICTED: { prefix: string; roles: string[] }[] = [
   { prefix: '/admin', roles: ['ADMIN'] },
+  { prefix: '/creator', roles: ['CREATOR, ADMIN'] },
 ];
 
 function isTokenExpired(token: string): boolean {

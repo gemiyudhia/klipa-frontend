@@ -91,7 +91,7 @@ export default function SubmitClip() {
   if (!campaign) return null;
 
   return (
-    <div className="min-h-screen bg-[#FDFBF7] flex flex-col justify-between">
+    <div className="min-h-screen flex flex-col justify-between">
       <Navbar />
 
       <main className="w-full max-w-6xl mx-auto px-4 pt-28 pb-16 md:pt-36 md:pb-24">
