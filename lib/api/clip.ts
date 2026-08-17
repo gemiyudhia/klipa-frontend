@@ -48,3 +48,25 @@ export async function getMyClips(page = 1, limit = 20) {
   });
   return data;
 }
+
+export async function getClipsByCampaign(
+  campaignId: string,
+  page = 1,
+  limit = 20,
+) {
+  const { data } = await apiClient.get<PaginatedResponse<Clip>>(
+    `/clip/by-campaign/${campaignId}`,
+    { params: { page, limit } },
+  );
+  return data;
+}
+
+export interface ReviewClipPayload {
+  status: 'APPROVED' | 'REJECTED' | 'REVISION_REQUESTED';
+  feedback?: string;
+}
+
+export async function reviewClip(clipId: string, payload: ReviewClipPayload) {
+  const { data } = await apiClient.patch(`/clip/${clipId}/review`, payload);
+  return data;
+}

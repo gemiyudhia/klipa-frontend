@@ -186,6 +186,17 @@ export default function Navbar() {
                         <UserCircle className="w-4 h-4 mr-2" />
                         Profil Saya
                       </Button>
+                      <Link
+                        href="/disputes"
+                        className="text-xs font-black uppercase text-[#FF66C4] underline"
+                      >
+                        <Button
+                          variant="ghost"
+                          className="w-full justify-start font-bold uppercase text-sm"
+                        >
+                          Lihat Dispute
+                        </Button>
+                      </Link>
                     </Link>
                     <Button
                       variant="ghost"
@@ -278,6 +289,18 @@ export default function Navbar() {
                 >
                   <UserCircle className="w-5 h-5" />
                   Profil Saya
+                </Button>
+              </Link>
+
+              <Link
+                href="/disputes"
+                className="text-xs font-black uppercase text-[#FF66C4] underline"
+              >
+                <Button
+                  variant="ghost"
+                  className="px-5 py-3 font-extrabold text-lg w-full uppercase flex items-center justify-center gap-2"
+                >
+                  Lihat Dispute
                 </Button>
               </Link>
 

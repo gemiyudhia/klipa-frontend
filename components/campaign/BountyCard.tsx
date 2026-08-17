@@ -27,7 +27,7 @@ export default function BountyCard({ campaign, index }: BountyCardProps) {
 
   return (
     <div
-      className={`neo-card flex flex-col justify-between bg-white p-6 transition-transform hover:rotate-0 hover:scale-[1.01] ${rotationClass}`}
+      className={`neo-card flex flex-col justify-between bg-white p-6 transition-transform hover:rotate-0 hover:scale-[1.01] mb-10 ${rotationClass}`}
     >
       <div>
         <div className="mb-4 flex items-center gap-2">
