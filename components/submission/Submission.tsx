@@ -7,7 +7,7 @@ import { toast } from 'sonner';
 
 import { getMyClips, type Clip } from '@/lib/api/clip';
 import { formatCurrency, getStatusMeta } from '@/lib/clip-utils';
-import DisputeModal from '../dsipute/DisputeModal';
+import DisputeModal from '../dispute/DisputeModal';
 import Navbar from '../layout/Navbar';
 import Footer from '../layout/Footer';
 
