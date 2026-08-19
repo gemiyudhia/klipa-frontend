@@ -13,6 +13,7 @@ const PROTECTED_PREFIXES = [
   '/profile',
   '/submit-clip',
   '/creator',
+  '/wallet',
 ];
 
 const ROLE_RESTRICTED: { prefix: string; roles: string[] }[] = [
