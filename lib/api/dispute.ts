@@ -31,8 +31,37 @@ export async function createDispute(clipId: string, reason: string) {
 }
 
 export async function getMyDisputes(page = 1, limit = 20) {
-  const { data } = await apiClient.get<PaginatedResponse<Dispute>>('/dispute/mine', {
-    params: { page, limit },
-  });
+  const { data } = await apiClient.get<PaginatedResponse<Dispute>>(
+    '/dispute/mine',
+    {
+      params: { page, limit },
+    },
+  );
+  return data;
+}
+
+export async function getPendingDisputes(page = 1, limit = 20) {
+  const { data } = await apiClient.get<PaginatedResponse<Dispute>>(
+    '/dispute/pending',
+    {
+      params: { page, limit },
+    },
+  );
+  return data;
+}
+
+export interface ResolveDisputePayload {
+  status: 'APPROVED' | 'REJECTED';
+  resolutionNote?: string;
+}
+
+export async function resolveDispute(
+  disputeId: string,
+  payload: ResolveDisputePayload,
+) {
+  const { data } = await apiClient.patch(
+    `/dispute/${disputeId}/resolve`,
+    payload,
+  );
   return data;
 }
