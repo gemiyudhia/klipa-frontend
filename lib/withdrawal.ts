@@ -1,4 +1,4 @@
-import apiClient from "./api/client";
+import apiClient from './api/client';
 
 export interface Withdrawal {
   id: string;
@@ -26,6 +26,10 @@ export interface UpdateBankInfoPayload {
   bankAccountNumber: string;
   bankAccountName: string;
 }
+export interface ResolveWithdrawalPayload {
+  status: 'APPROVED' | 'REJECTED';
+  rejectionReason?: string;
+}
 
 export async function updateBankInfo(payload: UpdateBankInfoPayload) {
   const { data } = await apiClient.patch('/withdrawal/bank-info', payload);
@@ -38,8 +42,40 @@ export async function createWithdrawal(amount: number) {
 }
 
 export async function getMyWithdrawals(page = 1, limit = 20) {
-  const { data } = await apiClient.get<PaginatedResponse<Withdrawal>>('/withdrawal/mine', {
-    params: { page, limit },
-  });
+  const { data } = await apiClient.get<PaginatedResponse<Withdrawal>>(
+    '/withdrawal/mine',
+    {
+      params: { page, limit },
+    },
+  );
+  return data;
+}
+
+export async function getPendingWithdrawals(page = 1, limit = 20) {
+  const { data } = await apiClient.get<
+    PaginatedResponse<
+      Withdrawal & {
+        user: {
+          id: string;
+          name: string;
+          email: string;
+          bankName: string;
+          bankAccountNumber: string;
+          bankAccountName: string;
+        };
+      }
+    >
+  >('/withdrawal/pending', { params: { page, limit } });
+  return data;
+}
+
+export async function resolveWithdrawal(
+  withdrawalId: string,
+  payload: ResolveWithdrawalPayload,
+) {
+  const { data } = await apiClient.patch(
+    `/withdrawal/${withdrawalId}/resolve`,
+    payload,
+  );
   return data;
 }
