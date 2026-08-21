@@ -46,42 +46,33 @@ export default function SignInForm() {
     },
   });
 
- async function onSubmit(data: signInSchemaValue) {
-   setIsSubmitting(true);
+  async function onSubmit(data: signInSchemaValue) {
+    setIsSubmitting(true);
+    try {
+      const res = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      });
 
-   try {
-     const response = await fetch('/api/auth/login', {
-       method: 'POST',
-       headers: {
-         'Content-Type': 'application/json',
-       },
-       body: JSON.stringify(data),
-     });
+      const profile = await res.json();
 
-     const result = await response.json();
+      if (!res.ok) {
+        throw { response: { data: profile } };
+      }
 
-     if (!response.ok) {
-       throw new Error(
-         Array.isArray(result.message) ? result.message[0] : result.message,
-       );
-     }
+      useAuthStore.getState().login(profile);
 
-     useAuthStore.getState().login(result.user);
-
-     toast.success('Berhasil Masuk!');
-
-     router.push('/');
-     router.refresh();
-   } catch (error) {
-     toast.error(
-       error instanceof Error
-         ? error.message
-         : 'Email atau kata sandi salah bre',
-     );
-   } finally {
-     setIsSubmitting(false);
-   }
- }
+      toast.success('Berhasil Masuk!');
+      router.push('/');
+    } catch (error: any) {
+      const message =
+        error?.response?.data?.message || 'Email atau kata sandi salah';
+      toast.error(Array.isArray(message) ? message[0] : message);
+    } finally {
+      setIsSubmitting(false);
+    }
+  }
 
   return (
     <Card className="bg-transparent border-0 shadow-none ring-0 md:bg-white md:border-black md:shadow-[9px_9px_0px_black]">
