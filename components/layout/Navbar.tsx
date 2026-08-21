@@ -15,6 +15,7 @@ import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuthStore } from '@/store/authStore';
+import { toast } from 'sonner';
 
 const navLinks = [
   { label: 'Eksplor Bounty', href: '/explore' },
@@ -74,14 +75,14 @@ export default function Navbar() {
   };
 
   async function handleLogout() {
-    await fetch('/api/auth/logout', {
-      method: 'POST',
-    });
-
-    useAuthStore.getState().logout();
-
-    router.push('/sign-in');
-    router.refresh();
+    try {
+      await fetch('/api/auth/logout', { method: 'POST' });
+    } finally {
+      logout();
+      setIsProfileOpen(false);
+      toast.success('Berhasil keluar');
+      router.push('/');
+    }
   }
 
   const isLoggedIn = isHydrated && !!user;

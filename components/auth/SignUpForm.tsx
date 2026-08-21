@@ -49,71 +49,44 @@ export default function SignUpForm() {
     setStep('role');
   }
 
-async function onSubmit(data: signUpSchemaValue) {
-  setIsSubmitting(true);
-
-  try {
-    const registerResponse = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/auth/register`,
-      {
+  async function onSubmit(data: signUpSchemaValue) {
+    setIsSubmitting(true);
+    try {
+      const registerRes = await fetch('/api/auth/register', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           name: data.name,
           email: data.email,
           password: data.password,
           role: data.role,
         }),
-      },
-    );
+      });
 
-    const registerResult = await registerResponse.json();
+      if (!registerRes.ok) {
+        const error = await registerRes.json();
+        throw { response: { data: error } };
+      }
 
-    if (!registerResponse.ok) {
-      throw new Error(
-        Array.isArray(registerResult.message)
-          ? registerResult.message[0]
-          : registerResult.message,
-      );
+      const loginRes = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: data.email, password: data.password }),
+      });
+
+      const profile = await loginRes.json();
+      useAuthStore.getState().login(profile);
+
+      toast.success('Akun berhasil dibuat!');
+      router.push('/');
+    } catch (error: any) {
+      const message =
+        error?.response?.data?.message || 'Gagal mendaftar, coba lagi';
+      toast.error(Array.isArray(message) ? message[0] : message);
+    } finally {
+      setIsSubmitting(false);
     }
-
-    const loginResponse = await fetch('/api/auth/login', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        email: data.email,
-        password: data.password,
-      }),
-    });
-
-    const loginResult = await loginResponse.json();
-
-    if (!loginResponse.ok) {
-      throw new Error(
-        Array.isArray(loginResult.message)
-          ? loginResult.message[0]
-          : loginResult.message,
-      );
-    }
-
-    useAuthStore.getState().login(loginResult.user);
-
-    toast.success('Akun berhasil dibuat!');
-
-    router.push('/');
-    router.refresh();
-  } catch (error) {
-    toast.error(
-      error instanceof Error ? error.message : 'Gagal mendaftar, coba lagi',
-    );
-  } finally {
-    setIsSubmitting(false);
   }
-}
 
   if (step === 'form') {
     return <SignUpProfileForm control={form.control} onNext={goToRoleStep} />;

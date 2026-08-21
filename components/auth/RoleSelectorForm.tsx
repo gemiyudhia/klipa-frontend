@@ -1,89 +1,85 @@
 'use client';
 
-import * as React from 'react';
-import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { toast } from 'sonner';
 
 import { Button } from '@/components/ui/button';
-
 import RoleSelector, { RoleValue } from './RoleSelector';
-
 import apiClient from '@/lib/api/client';
 import { useAuthStore } from '@/store/authStore';
 
 export default function RoleSelectorForm() {
   const router = useRouter();
+  const searchParams = useSearchParams();
 
-  const [role, setRole] = React.useState<RoleValue>();
-  const [isSubmitting, setIsSubmitting] = React.useState(false);
-  const [isReady, setIsReady] = React.useState(false);
+  const [role, setRole] = useState<RoleValue>();
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isReady, setIsReady] = useState(false);
 
-  React.useEffect(() => {
+  useEffect(() => {
+    const accessToken = searchParams.get('access_token');
+    const refreshToken = searchParams.get('refresh_token');
+
     async function init() {
-      try {
-        const { data: profile } = await apiClient.get('/auth/me');
+      if (accessToken && refreshToken) {
+        try {
+          const res = await fetch('/api/auth/oauth-session', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ accessToken, refreshToken }),
+          });
 
-        useAuthStore.getState().setUser(profile);
+          const profile = await res.json();
+          if (!res.ok) throw new Error(profile.message);
 
-        setIsReady(true);
-      } catch (error) {
-        console.error('ROLE SELECTOR AUTH:', error);
-
-        toast.error('Sesi tidak valid, silakan login ulang');
-
-        router.push('/sign-in');
+          useAuthStore.getState().login(profile);
+          window.history.replaceState({}, '', '/role-selector');
+        } catch {
+          toast.error('Sesi tidak valid, silakan login ulang');
+          router.push('/sign-in');
+          return;
+        }
       }
+      setIsReady(true);
     }
 
     init();
-  }, [router]);
+  }, [searchParams, router]);
 
   async function handleSubmit() {
     if (!role) return;
-
     setIsSubmitting(true);
-
     try {
       const { data } = await apiClient.patch('/auth/select-role', { role });
 
       const currentUser = useAuthStore.getState().user;
-
       if (currentUser) {
-        useAuthStore.getState().setUser({
-          ...currentUser,
-          role: data.role,
-          isRoleSelected: true,
-        });
+        useAuthStore
+          .getState()
+          .setUser({ ...currentUser, role: data.role, isRoleSelected: true });
       }
 
       toast.success('Role berhasil dipilih!');
-
-      router.push('/explore');
-      router.refresh();
+      router.push('/');
     } catch (error: any) {
-      console.error('SELECT ROLE ERROR:', error);
-
       const message =
         error?.response?.data?.message || 'Gagal memilih role, coba lagi';
-
       toast.error(Array.isArray(message) ? message[0] : message);
     } finally {
       setIsSubmitting(false);
     }
   }
 
-  if (!isReady) {
-    return null;
-  }
+  if (!isReady) return null;
 
   return (
-    <main className="mx-auto w-full max-w-4xl px-4 py-8">
+    <main className="w-full max-w-4xl mx-auto px-4 py-8">
       <header className="mb-8 text-center md:text-left">
-        <h1 className="text-3xl font-black uppercase tracking-tight md:text-5xl">
+        <h1 className="text-3xl md:text-5xl font-black uppercase tracking-tight">
           Lu Pengen Jadi Apa?
         </h1>
-
-        <p className="mt-2 text-base font-medium text-muted-foreground md:text-lg">
+        <p className="mt-2 text-base md:text-lg font-medium text-muted-foreground">
           Mau ngasih bahan video atau nyulap video jadi emas?
         </p>
       </header>
@@ -95,7 +91,7 @@ export default function RoleSelectorForm() {
           type="button"
           disabled={!role || isSubmitting}
           onClick={handleSubmit}
-          className="neo-shadow neo-press h-14 w-full rounded-none border-4 border-black bg-tertiary text-lg font-black uppercase text-tertiary-foreground transition-none disabled:cursor-not-allowed disabled:opacity-50 md:text-xl"
+          className="w-full h-14 bg-tertiary text-tertiary-foreground font-black text-lg md:text-xl uppercase border-4 border-black rounded-none neo-shadow neo-press transition-none disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {isSubmitting ? 'Lagi Diproses...' : 'Lanjutkan'}
         </Button>
