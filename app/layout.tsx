@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { Space_Grotesk } from 'next/font/google';
 import './globals.css';
 import { Toaster } from '@/components/ui/sonner';
+import AuthHydrator from '@/components/auth/AuthHydrator';
 
 const spaceGrotesk = Space_Grotesk({
   subsets: ['latin'],
@@ -19,6 +20,7 @@ export default function RootLayout({ children }: LayoutProps<'/'>) {
   return (
     <html lang="id" className={`${spaceGrotesk.variable} h-full antialiased scroll-smooth`}>
       <body className={`${spaceGrotesk.className} min-h-full flex flex-col tracking-wide`}>
+        <AuthHydrator />
         {children}
         <Toaster />
       </body>

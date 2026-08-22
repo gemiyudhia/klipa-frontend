@@ -9,6 +9,7 @@ export interface AuthUser {
   email: string;
   role: Role;
   balance: number;
+  avatarUrl?: string;
   isRoleSelected: boolean;
 }
 
