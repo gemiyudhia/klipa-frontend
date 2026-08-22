@@ -9,12 +9,17 @@ import {
   UserPlus,
   LogOut,
   Wallet,
+  LayoutDashboard,
+  Megaphone,
+  Film,
+  Scale,
+  type LucideIcon,
 } from 'lucide-react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { useAuthStore } from '@/store/authStore';
+import { useAuthStore, type Role } from '@/store/authStore';
 import { toast } from 'sonner';
 
 const navLinks = [
@@ -22,6 +27,36 @@ const navLinks = [
   { label: 'Cara Kerja', href: '#cara-kerja' },
   { label: 'Harga & Komisi', href: '#harga-komisi' },
 ];
+
+interface ProfileMenuItem {
+  label: string;
+  href: string;
+  icon: LucideIcon;
+}
+
+function getProfileMenuItems(role: Role | undefined): ProfileMenuItem[] {
+  if (role === 'ADMIN') {
+    return [
+      { label: 'Dashboard Admin', href: '/admin', icon: LayoutDashboard },
+      { label: 'Profil Saya', href: '/profile', icon: UserCircle },
+    ];
+  }
+
+  if (role === 'CREATOR') {
+    return [
+      { label: 'Campaign Saya', href: '/campaigns', icon: Megaphone },
+      { label: 'Wallet', href: '/wallet', icon: Wallet },
+      { label: 'Profil Saya', href: '/profile', icon: UserCircle },
+    ];
+  }
+
+  return [
+    { label: 'Klip Gua', href: '/my-clips', icon: Film },
+    { label: 'Dispute Gua', href: '/disputes', icon: Scale },
+    { label: 'Dompet', href: '/wallet', icon: Wallet },
+    { label: 'Profil', href: '/profile', icon: UserCircle },
+  ];
+}
 
 function formatCurrency(amount: number) {
   return new Intl.NumberFormat('id-ID', {
@@ -56,7 +91,6 @@ export default function Navbar() {
           setIsVisible(true);
         }
       }
-
       setLastScrollY(currentScrollY);
     };
 
@@ -86,6 +120,7 @@ export default function Navbar() {
   }
 
   const isLoggedIn = isHydrated && !!user;
+  const profileMenuItems = getProfileMenuItems(user?.role);
 
   return (
     <nav
@@ -136,6 +171,7 @@ export default function Navbar() {
           ))}
         </div>
 
+        {/* Desktop: kanan navbar */}
         <div className="hidden items-center gap-3 md:flex">
           {!isLoggedIn ? (
             <div className="flex items-center gap-2">
@@ -144,7 +180,6 @@ export default function Navbar() {
                   Masuk
                 </Button>
               </Link>
-
               <Link href="/sign-up">
                 <Button
                   variant="outline"
@@ -176,29 +211,27 @@ export default function Navbar() {
               {isProfileOpen && (
                 <div className="absolute right-0 mt-2 w-56 border-4 border-black bg-white shadow-[6px_6px_0_black] z-50">
                   <div className="flex flex-col gap-1 p-2">
-                    <Link
-                      href="/profile"
-                      onClick={() => setIsProfileOpen(false)}
-                    >
-                      <Button
-                        variant="ghost"
-                        className="w-full justify-start font-bold uppercase text-sm"
-                      >
-                        <UserCircle className="w-4 h-4 mr-2" />
-                        Profil Saya
-                      </Button>
-                      <Link
-                        href="/disputes"
-                        className="text-xs font-black uppercase text-[#FF66C4] underline"
-                      >
-                        <Button
-                          variant="ghost"
-                          className="w-full justify-start font-bold uppercase text-sm"
+                    {profileMenuItems.map((item) => {
+                      const Icon = item.icon;
+                      return (
+                        <Link
+                          key={item.href}
+                          href={item.href}
+                          onClick={() => setIsProfileOpen(false)}
                         >
-                          Lihat Dispute
-                        </Button>
-                      </Link>
-                    </Link>
+                          <Button
+                            variant="ghost"
+                            className="w-full justify-start font-bold uppercase text-sm"
+                          >
+                            <Icon className="w-4 h-4 mr-2" />
+                            {item.label}
+                          </Button>
+                        </Link>
+                      );
+                    })}
+
+                    <div className="my-1 border-t-2 border-black/10" />
+
                     <Button
                       variant="ghost"
                       onClick={handleLogout}
@@ -214,6 +247,7 @@ export default function Navbar() {
           )}
         </div>
 
+        {/* Mobile: ikon profil kanan atas */}
         <div className="flex items-center md:hidden">
           <Button
             variant="ghost"
@@ -283,27 +317,24 @@ export default function Navbar() {
                 </div>
               </div>
 
-              <Link href="/profile" onClick={() => setIsProfileOpen(false)}>
-                <Button
-                  variant="outline"
-                  className="px-5 py-3 font-extrabold text-lg w-full uppercase flex items-center justify-center gap-2"
-                >
-                  <UserCircle className="w-5 h-5" />
-                  Profil Saya
-                </Button>
-              </Link>
-
-              <Link
-                href="/disputes"
-                className="text-xs font-black uppercase text-[#FF66C4] underline"
-              >
-                <Button
-                  variant="ghost"
-                  className="px-5 py-3 font-extrabold text-lg w-full uppercase flex items-center justify-center gap-2"
-                >
-                  Lihat Dispute
-                </Button>
-              </Link>
+              {profileMenuItems.map((item) => {
+                const Icon = item.icon;
+                return (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    onClick={() => setIsProfileOpen(false)}
+                  >
+                    <Button
+                      variant="outline"
+                      className="px-5 py-3 font-extrabold text-lg w-full uppercase flex items-center justify-center gap-2"
+                    >
+                      <Icon className="w-5 h-5" />
+                      {item.label}
+                    </Button>
+                  </Link>
+                );
+              })}
 
               <Button
                 onClick={handleLogout}
