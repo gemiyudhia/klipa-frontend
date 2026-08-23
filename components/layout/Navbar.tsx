@@ -282,7 +282,7 @@ export default function Navbar() {
           {!isLoggedIn ? (
             <div className="flex flex-col gap-3">
               <p className="text-xs font-bold uppercase text-gray-500 px-2">
-                Akun Saya
+                Akun Gua
               </p>
 
               <Link href="/sign-in" onClick={() => setIsProfileOpen(false)}>
