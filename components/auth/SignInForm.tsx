@@ -149,14 +149,14 @@ export default function SignInForm() {
                 </Field>
               )}
             />
-            <div className="text-right">
+            {/* <div className="text-right">
               <Link
                 href="#"
                 className="underline underline-offset-4 font-bold text-lg text-gray-800 transition-none tracking-wide md:text-2xl"
               >
                 Lupa sandi?
               </Link>
-            </div>
+            </div> */}
           </FieldGroup>
           <CardFooter className="border-none bg-transparent pb-8">
             <Field orientation="vertical" className="pt-2">

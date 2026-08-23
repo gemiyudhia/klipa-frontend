@@ -89,7 +89,7 @@ export default function HomePage() {
         <div className="flex flex-col items-center justify-between gap-12 md:min-h-175 md:flex-row md:items-center lg:gap-20">
           <div className="flex w-full max-w-xl flex-col items-center gap-8 text-center md:items-start md:text-left">
             <div className="neo-card rotate-left px-4 py-1.5 text-xs font-bold uppercase">
-              Beta Launch
+              Aplikasi ini masih DEMO
             </div>
 
             <h1 className="neo-card rotate-left bg-primary px-10 py-10 text-3xl font-extrabold uppercase leading-tight sm:text-4xl lg:px-12 lg:py-11 lg:text-6xl">
