@@ -3,6 +3,13 @@ import Footer from '@/components/layout/Footer';
 import BountyCard from '@/components/campaign/BountyCard';
 import { getCampaignsServer } from '@/lib/api/server-campaign';
 import ExploreSearch from '@/components/campaign/ExploreSearch';
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Eksplor Campaign',
+  description:
+    'Jelajahi campaign aktif dari berbagai Creator, temukan bounty yang cocok, dan mulai potong klip untuk dapat reward.',
+};
 
 export default async function ExploreBountyPage({
   searchParams,

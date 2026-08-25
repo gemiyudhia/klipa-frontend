@@ -2,8 +2,15 @@ import Footer from '@/components/layout/Footer';
 import Navbar from '@/components/layout/Navbar';
 import { Button } from '@/components/ui/button';
 import { Check } from 'lucide-react';
+import type { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
+
+export const metadata: Metadata = {
+  title: 'Beranda',
+  description:
+    'Platform marketplace dua arah yang menghubungkan Creator dengan Clipper untuk distribusi video pendek melalui sistem campaign berbasis reward.',
+};
 
 const steps = [
   {
