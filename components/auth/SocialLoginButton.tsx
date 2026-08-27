@@ -18,7 +18,7 @@ export default function SocialLoginButton({
         type="button"
         variant="outline"
         onClick={() => {
-          window.location.href = `${process.env.NEXT_PUBLIC_API_URL}/auth/google`;
+          window.location.href = '/api/auth/google';
         }}
         className="w-full h-12 neo-button text-black font-extrabold text-sm uppercase tracking-wide border-4 border-black rounded-none neo-shadow hover:neo-button transition-none flex items-center justify-center gap-2 md:h-14"
       >
