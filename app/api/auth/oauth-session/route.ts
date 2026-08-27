@@ -9,19 +9,41 @@ const COOKIE_OPTIONS = {
   path: '/',
 };
 
-export async function POST(request: Request) {
+export async function GET(request: Request) {
   try {
-    const { accessToken, refreshToken } = await request.json();
+    const url = new URL(request.url);
 
-    if (!accessToken || !refreshToken) {
-      return NextResponse.json(
-        { message: 'Token tidak lengkap' },
-        { status: 400 },
+    const code = url.searchParams.get('code');
+    const redirect = url.searchParams.get('redirect') || '/explore';
+
+    if (!code) {
+      return NextResponse.redirect(
+        new URL('/sign-in?error=missing_oauth_code', request.url),
       );
     }
 
-    // Validasi access token ke backend
-    const meRes = await fetch(`${API_BASE_URL}/auth/me`, {
+    // Tukarkan temporary code ke backend
+    const tokenResponse = await fetch(`${API_BASE_URL}/auth/oauth/exchange`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ code }),
+      cache: 'no-store',
+    });
+
+    if (!tokenResponse.ok) {
+      console.error('OAuth exchange failed:', await tokenResponse.text());
+
+      return NextResponse.redirect(
+        new URL('/sign-in?error=oauth_exchange_failed', request.url),
+      );
+    }
+
+    const { accessToken, refreshToken } = await tokenResponse.json();
+
+    // Validasi token ke backend
+    const meResponse = await fetch(`${API_BASE_URL}/auth/me`, {
       method: 'GET',
       headers: {
         Authorization: `Bearer ${accessToken}`,
@@ -29,16 +51,16 @@ export async function POST(request: Request) {
       cache: 'no-store',
     });
 
-    if (!meRes.ok) {
-      return NextResponse.json(
-        { message: 'Token tidak valid' },
-        { status: 401 },
+    if (!meResponse.ok) {
+      return NextResponse.redirect(
+        new URL('/sign-in?error=invalid_oauth_session', request.url),
       );
     }
 
-    const profile = await meRes.json();
+    const profile = await meResponse.json();
 
-    const response = NextResponse.json(profile);
+    // Browser sekarang menerima cookie dari Vercel
+    const response = NextResponse.redirect(new URL(redirect, request.url));
 
     response.cookies.set('accessToken', accessToken, {
       ...COOKIE_OPTIONS,
@@ -54,9 +76,8 @@ export async function POST(request: Request) {
   } catch (error) {
     console.error('OAUTH SESSION ERROR:', error);
 
-    return NextResponse.json(
-      { message: 'Gagal membuat session' },
-      { status: 500 },
+    return NextResponse.redirect(
+      new URL('/sign-in?error=oauth_session_failed', request.url),
     );
   }
 }

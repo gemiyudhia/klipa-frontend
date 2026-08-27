@@ -16,17 +16,13 @@ export default function RoleSelectorForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   async function handleSubmit() {
-    if (!role || isSubmitting) return;
+    if (!role) return;
 
     setIsSubmitting(true);
 
     try {
-      // Token TIDAK dikirim dari frontend.
-      // /api/proxy/auth/select-role akan membaca
-      // accessToken dari HttpOnly cookie.
       const { data } = await apiClient.patch('/auth/select-role', { role });
 
-      // Update user di Zustand setelah role berhasil disimpan
       const currentUser = useAuthStore.getState().user;
 
       if (currentUser) {
@@ -39,10 +35,8 @@ export default function RoleSelectorForm() {
 
       toast.success('Role berhasil dipilih!');
 
-      router.replace('/explore');
+      router.push('/');
     } catch (error: any) {
-      console.error('SELECT ROLE ERROR:', error);
-
       const message =
         error?.response?.data?.message || 'Gagal memilih role, coba lagi';
 
