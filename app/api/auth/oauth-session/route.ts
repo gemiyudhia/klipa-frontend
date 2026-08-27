@@ -4,9 +4,8 @@ const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
 
 const COOKIE_OPTIONS = {
   httpOnly: true,
-  sameSite: 'lax' as const,
   secure: process.env.NODE_ENV === 'production',
-  maxAge: 60 * 60 * 24 * 7,
+  sameSite: 'lax' as const,
   path: '/',
 };
 
@@ -41,25 +40,15 @@ export async function POST(request: Request) {
 
     const response = NextResponse.json(profile);
 
-    // Simpan token di domain Vercel sebagai HTTP-only cookie
-    response.cookies.set('accessToken', accessToken, COOKIE_OPTIONS);
-
-    response.cookies.set('refreshToken', refreshToken, COOKIE_OPTIONS);
-
-    // Cookie yang memang perlu dibaca client
-    response.cookies.set('userRole', profile.role ?? '', {
+    response.cookies.set('accessToken', accessToken, {
       ...COOKIE_OPTIONS,
-      httpOnly: false,
+      maxAge: 15 * 60,
     });
 
-    response.cookies.set(
-      'isRoleSelected',
-      String(profile.isRoleSelected ?? false),
-      {
-        ...COOKIE_OPTIONS,
-        httpOnly: false,
-      },
-    );
+    response.cookies.set('refreshToken', refreshToken, {
+      ...COOKIE_OPTIONS,
+      maxAge: 7 * 24 * 60 * 60,
+    });
 
     return response;
   } catch (error) {
