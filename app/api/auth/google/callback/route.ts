@@ -1,39 +1,47 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 
-export async function GET(request: Request) {
-  const { searchParams } = new URL(request.url);
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
 
-  const accessToken = searchParams.get('access_token');
-  const refreshToken = searchParams.get('refresh_token');
-  const redirectPath = searchParams.get('redirect') || '/';
+export async function GET(request: NextRequest) {
+  const url = new URL(request.url);
 
-  if (!accessToken || !refreshToken) {
+  const code = url.searchParams.get('code');
+
+  if (!code) {
     return NextResponse.redirect(
-      new URL('/sign-in?error=google_auth_failed', request.url),
+      new URL('/sign-in?error=google_oauth_failed', request.url),
     );
   }
 
-  const response = NextResponse.redirect(new URL(redirectPath, request.url));
+  const backendUrl = new URL('/auth/google/callback', API_BASE_URL);
 
-  response.cookies.set({
-    name: 'accessToken',
-    value: accessToken,
-    httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
-    sameSite: 'lax',
-    path: '/',
-    maxAge: 60 * 15,
+  backendUrl.searchParams.set('code', code);
+
+  if (url.searchParams.has('scope')) {
+    backendUrl.searchParams.set('scope', url.searchParams.get('scope')!);
+  }
+
+  if (url.searchParams.has('authuser')) {
+    backendUrl.searchParams.set('authuser', url.searchParams.get('authuser')!);
+  }
+
+  if (url.searchParams.has('prompt')) {
+    backendUrl.searchParams.set('prompt', url.searchParams.get('prompt')!);
+  }
+
+  const response = await fetch(backendUrl, {
+    method: 'GET',
+    redirect: 'manual',
+    cache: 'no-store',
   });
 
-  response.cookies.set({
-    name: 'refreshToken',
-    value: refreshToken,
-    httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
-    sameSite: 'lax',
-    path: '/',
-    maxAge: 60 * 60 * 24 * 7,
-  });
+  const location = response.headers.get('location');
 
-  return response;
+  if (location) {
+    return NextResponse.redirect(location);
+  }
+
+  return NextResponse.redirect(
+    new URL('/sign-in?error=google_oauth_failed', request.url),
+  );
 }
